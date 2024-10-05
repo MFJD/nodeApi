@@ -1,8 +1,12 @@
 const express = require('express');
 const Product = require('./models/productModels'); // Ensure this model is correctly defined
 const mongo = require('mongoose');
+require('dotenv').config()
 const { swaggerUi, swaggerDocs } = require('./swagger');
 
+
+
+const PORT = process.env.port || 4200
 const app = express();
 app.use(express.json());
 
@@ -20,8 +24,6 @@ app.get('/', (req, res) => {
  * tags:
  *   - name: Products
  *     description: Operations related to products
- *   -name : Category
- *      description: Operation related to categories
  */
 
 
@@ -163,7 +165,7 @@ app.delete('/product/:id', async (req, res) => {
  *   delete:
  *     summary: Delete a product by ID
  *     description: Get a list of all available products in the inventory.
- *     tags: [Categories]
+ *     tags: [Products]
  *     parameters:
  *       - name: id
  *         in: path
@@ -187,14 +189,17 @@ app.delete('/product/:id', async (req, res) => {
 
 
 // Run the server on port 4200
-app.listen(4200, () => {
-    console.log('Listening on port 4200');
-});
+
+
+mongo.set('strictQuery',false)
 
 // Connect to MongoDB
-mongo.connect('mongodb+srv://mbajames122:9VYBgj2XoDKi8lIR@databasapi.qwmlx.mongodb.net/?retryWrites=true&w=majority&appName=databasAPI')
+mongo.connect(process.env.mongoUrl)
     .then(() => {
         console.log('Connected successfully to MongoDB');
+        app.listen(PORT, () => {
+            console.log('Listening on port 4200');
+        });
     })
     .catch((err) => {
         console.log(err);
@@ -203,4 +208,4 @@ mongo.connect('mongodb+srv://mbajames122:9VYBgj2XoDKi8lIR@databasapi.qwmlx.mongo
 
 
 
-    // This is how to write on swagger and this is how to do things correctly there are 2 ressources,products and categories this is how to do it 
+// This is how to write on swagger and this is how to do things correctly there are 2 ressources,products and categories this is how to do it 

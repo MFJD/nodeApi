@@ -19,6 +19,6 @@ const swaggerOptions = {
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
-console.log(JSON.stringify(swaggerDocs, null, 2)); // Debugging line
+// console.log(JSON.stringify(swaggerDocs, null, 2)); // Debugging line
 
 module.exports = { swaggerUi, swaggerDocs };

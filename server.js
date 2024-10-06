@@ -1,14 +1,24 @@
 const express = require('express');
 const Product = require('./models/productModels'); // Ensure this model is correctly defined
 const mongo = require('mongoose');
+const cors = require('cors');
 require('dotenv').config()
 const { swaggerUi, swaggerDocs } = require('./swagger');
 
 
 
-const PORT = process.env.port || 4200
+const PORT = process.env.port || 3000
 const app = express();
 app.use(express.json());
+app.use(cors())
+
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+});
+
 
 // Swagger route
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
@@ -50,13 +60,32 @@ app.get('/product', async (req, res) => {
     }
 });
 
+
+/**
 /**
  * @swagger
  * /product:
  *   post:
  *     summary: Create a new product
- *     description: Get a list of all available products in the inventory.
+ *     description: Create a new product in the database.
  *     tags: [Products]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               price:
+ *                 type: number
+ *               quantity: 
+ *                  type: numner
+ *             example:
+ *               name: "Product Name"
+ *               price: 10.99
+ *               quantity: 2000
  *     responses:
  *       200:
  *         description: The created product
@@ -70,6 +99,9 @@ app.post('/product', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
+
+
+
 
 /**
  * @swagger
@@ -99,6 +131,7 @@ app.get('/product/:id', async (req, res) => {
     }
 });
 
+
 /**
  * @swagger
  * /product/{id}:
@@ -127,6 +160,8 @@ app.put('/product/:id', async (req, res) => {
     }
 });
 
+
+
 /**
  * @swagger
  * /product/{id}:
@@ -154,6 +189,7 @@ app.delete('/product/:id', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
+
 
 
 
@@ -191,14 +227,14 @@ app.delete('/product/:id', async (req, res) => {
 // Run the server on port 4200
 
 
-mongo.set('strictQuery',false)
+mongo.set('strictQuery', false)
 
 // Connect to MongoDB
 mongo.connect(process.env.mongoUrl)
     .then(() => {
         console.log('Connected successfully to MongoDB');
         app.listen(PORT, () => {
-            console.log('Listening on port 4200');
+            console.log(`Listening on port ${PORT}`);
         });
     })
     .catch((err) => {

@@ -163,7 +163,7 @@ app.put('/product/:id', async (req, res) => {
 /**
  * @swagger
  * /product/{id}:
- *   delete:+
+ *   delete:
  *     summary: Delete a product by ID
  *     description: Get a list of all available products in the inventory.
  *     tags: [Products]

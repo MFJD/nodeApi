@@ -5,7 +5,7 @@ const mongo = require('mongoose');
 const connectDB = async () => {
     mongo.set('strictQuery', false)
     try {
-        await mongoose.connect(process.env.mongoUrl
+        await mongoose.connect('mongodb+srv://mbajames122:9VYBgj2XoDKi8lIR@databasapi.qwmlx.mongodb.net/?retryWrites=true&w=majority&appName=databasAPI'
         //     ,
         //      {
         //     useNewUrlParser: true,
